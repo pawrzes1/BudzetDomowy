@@ -10,7 +10,7 @@ TODO- Budżet Domowy
   [] Dodać możliwość usuwania wpisów
   [] Dodać sumowanie wydatków i przychodów oraz bilans
   [] Zapisywać dane w localStorage
-
+  
 
 
 💄 Interfejs użytkownika i stylizacja

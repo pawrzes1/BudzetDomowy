@@ -1,10 +1,10 @@
+
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { TransactionModel } from '../../models/transaction.model/transaction.model';
+
 
 @Component({
-  // Removed imports array from here
   imports: [CommonModule, FormsModule],
   templateUrl: './app.budget-form.component.html',
   styleUrl: './app.budget-form.component.css',
@@ -13,7 +13,21 @@ import { TransactionModel } from '../../models/transaction.model/transaction.mod
 })
 export class BudgetFormComponent {
 
-
+categories: string[] = [
+  'Jedzenie',
+  'Transport',
+  'Rozrywka',
+  'Zakupy',
+  'Zdrowie',
+  'Podróże',
+  'Edukacja',
+  'Dom',
+  'Ubrania',
+  'Technologia',
+  'Sport',
+  'Inwestycje',
+  'Inne'
+];
 
   // Dodajemy zmienną do formularza budżetowego
   budgetForm: {
@@ -21,13 +35,13 @@ export class BudgetFormComponent {
     amount: number | null;
     date: Date | null;
     category: string;
-    type: 'income' | 'expense';
+    type: 'przychód' | 'wydatek';
   } = {
     name: '',
     amount: null,
     date: null,
     category: '',
-    type: 'income' as 'income' | 'expense'
+    type: 'przychód' as 'przychód' | 'wydatek',
   };
 
 
@@ -44,7 +58,7 @@ export class BudgetFormComponent {
       amount: null,
       date: null,
       category: '',
-      type: 'income'
+      type: 'przychód' as 'przychód' | 'wydatek',
     }; 
 
   console.log('Form reset:', this.budgetForm);

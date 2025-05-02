@@ -1,13 +1,13 @@
 
 
-<form class="form m-3 " (ngSubmit)="onSubmit()" #budgetForm="ngForm">
+<form class="form m-3 " (ngSubmit)="onSubmit()" #form="ngForm">
   <h2>Dodaj nowy budżet</h2>
   <div class="mb-3">
     <label class="form-label" for="name">Name:</label>
-    <input class="form-control" id="name" [(ngModel)]="budget.name" name="name" required />
+    <input class="form-control" id="name" [(ngModel)]="budgetForm.name" name="name" required />
   </div>
   <div>
     <label class="form-label" for="amount">Amount:</label>
-    <input class="form-control" id="amount" type="number" [(ngModel)]="budget.amount" name="amount" required />
+    <input class="form-control" id="amount" type="number" [(ngModel)]="budgetForm.amount" name="amount" required />
   </div>
   <button class="btn btn-primary mt-3" type="submit">Submit</button>

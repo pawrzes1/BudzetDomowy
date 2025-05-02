@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { TransactionModel } from '../../models/transaction.model/transaction.model';
 
 @Component({
   // Removed imports array from here
@@ -11,14 +12,17 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-budget-form',
 })
 export class BudgetFormComponent {
-budget: any;
 
 
-
-  constructor() { }
 
   // Dodajemy zmienną do formularza budżetowego
-  budgetForm = {
+  budgetForm: {
+    name: string;
+    amount: number | null;
+    date: Date | null;
+    category: string;
+    type: 'income' | 'expense';
+  } = {
     name: '',
     amount: null,
     date: null,
@@ -45,16 +49,5 @@ budget: any;
 
   console.log('Form reset:', this.budgetForm);
 
-
-
-  // Możesz również dodać logikę do resetowania formularza w UI
-  // np. czyszczenie pól formularza, ustawienie domyślnych wartości itp. 
-  // Możesz użyć ngModel lub Reactive Forms do zarządzania stanem formularza
-  // w Angularze.
-
-  // Przykład z użyciem ngModel:
-  // <input [(ngModel)]="budgetForm.name" placeholder="Nazwa transakcji" />
-  // <input [(ngModel)]="budgetForm.amount" placeholder="Kwota" type="number" />
-  // <input [(ngModel)]="budgetForm.date" placeholder="Data" type="date" /> 
   }
 }

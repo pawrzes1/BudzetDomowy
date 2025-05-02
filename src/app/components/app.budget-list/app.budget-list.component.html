@@ -1,1 +1,26 @@
-<p>app.budget-list works!</p>
+<div *ngIf="budgetItems.length > 0; else empty">
+    <ul class="list-group list-group-flush mt-3">
+        <li *ngFor="let item of budgetItems" class="list-group-item d-flex justify-content-between align-items-center">
+            <div class="d-flex flex-column">
+                <h5 class="mb-1">{{ item.name }}</h5>
+                <p class="mb-1">Kwota: {{ item.amount | currency }}</p>
+                <p class="mb-1">Rodzaj: {{ item.type }}</p>
+                <p class="mb-1">Kategoria: {{ item.category }}</p>
+                <p class="mb-1">Data: {{ item.date | date }}</p>
+            </div>
+            <!--<button (click)="deleteBudgetItem(item.id)" class="btn btn-danger btn-sm">Usuń</button>-->
+        </li>
+        
+    </ul>
+
+</div>
+
+
+<ng-template #empty>
+    <div class="alert alert-info mt-5" style="width: 500px;" role="alert">
+        <h4 class="alert-heading">Brak pozycji w budżecie!</h4>
+        <p>Nie dodano jeszcze żadnych pozycji do budżetu. Dodaj pierwszą pozycję, aby rozpocząć zarządzanie swoim budżetem.</p>
+        
+        
+    </div>
+</ng-template>

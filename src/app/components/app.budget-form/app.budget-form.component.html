@@ -1,7 +1,7 @@
 
 
-<form class="form m-3 " (ngSubmit)="onSubmit()" #form="ngForm">
-  <h2>Dodaj nowy budżet</h2>
+<form class="form m-3 " style="width: 600px;" (ngSubmit)="onSubmit()" #form="ngForm">
+  <h2>Dodaj nową pozycję w budżecie</h2>
   <div class="card mb-3 p-3 pt-0">
     
     <div class="card-header mb-3">
@@ -13,32 +13,38 @@
       <input class="form-control" id="name" [(ngModel)]="budgetForm.name" name="name" required />
     </div>
     
-    <div class="mb-3">
-      <label class="form-label" for="amount">Kwota:</label>
-      <input class="form-control" id="amount" type="number" [(ngModel)]="budgetForm.amount" name="amount" required />
-    </div>
+    <div class="row">
+      <div class="mb-3 col" style="width: 200px;">
+        <label class="form-label" for="amount">Kwota:</label>
+        <input class="form-control" id="amount" type="number" [(ngModel)]="budgetForm.amount" name="amount" required />
+      </div>
 
-    <div class="mb-3">
+    
+      <div class="mb-3 col" style="width: 200px;">
         <label class="form-label" for="type">Rodzaj:</label>
         <select class="form-select" id="type" [(ngModel)]="budgetForm.type" name="type" required>
           <option value="income">Przychód</option>
           <option value="expense">Wydatek</option>
         </select>
+      </div>
     </div>
 
-    <div class="mb-3">
-      <label class="form-label" for="category">Kategoria:</label>
-      <select class="form-select" id="category" [(ngModel)]="budgetForm.category" name="category" required>
-        <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
-      </select>
+    <div class="row">
+      <div class="mb-3 col" style="width: 200px;">
+        <label class="form-label" for="category">Kategoria:</label>
+        <select class="form-select" id="category" [(ngModel)]="budgetForm.category" name="category" required>
+          <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+        </select>
+      </div>
+
+      <div class="mb-3 col" style="width: 200px;">
+        <label class="form-label" for="date">Data:</label>
+        <input class="form-control" id="date" type="date" [(ngModel)]="budgetForm.date" name="date" required />
+      </div> 
     </div>
 
-    <div class="mb-3">
-      <label class="form-label" for="date">Data:</label>
-      <input class="form-control" id="date" type="date" [(ngModel)]="budgetForm.date" name="date" required />
-    </div>
   </div>
  
 
 
-  <button class="btn btn-primary mt-3" type="submit">Submit</button>
+  <button class="btn btn-primary mt-3" type="submit">Zapisz</button>

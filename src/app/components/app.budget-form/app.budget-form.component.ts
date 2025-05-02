@@ -2,6 +2,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { BudgetService } from '../../services/budget.service';
 
 
 @Component({
@@ -13,21 +14,25 @@ import { FormsModule } from '@angular/forms';
 })
 export class BudgetFormComponent {
 
-categories: string[] = [
-  'Jedzenie',
-  'Transport',
-  'Rozrywka',
-  'Zakupy',
-  'Zdrowie',
-  'Podróże',
-  'Edukacja',
-  'Dom',
-  'Ubrania',
-  'Technologia',
-  'Sport',
-  'Inwestycje',
-  'Inne'
-];
+  constructor(private budgetService: BudgetService) {}
+
+
+
+  categories: string[] = [
+    'Jedzenie',
+    'Transport',
+    'Rozrywka',
+    'Zakupy',
+    'Zdrowie',
+    'Podróże',
+    'Edukacja',
+    'Dom',
+    'Ubrania',
+    'Technologia',
+    'Sport',
+    'Inwestycje',
+    'Inne'
+  ];
 
   // Dodajemy zmienną do formularza budżetowego
   budgetForm: {
@@ -47,21 +52,31 @@ categories: string[] = [
 
   // Dodajemy metody do obsługi formularza
   onSubmit() {
-    // Logika do obsługi formularza, np. dodanie transakcji do budżetu
-    console.log('Form submitted:', this.budgetForm);
-  }
+    if (!this.budgetForm.name || !this.budgetForm.amount || !this.budgetForm.date || !this.budgetForm.category) {
+      if (this.budgetForm.date) { // Sprawdzamy, czy data nie jest null
+        const item = {
+          id: Math.floor(Math.random() * 1000), // Generowanie losowego ID
+          name: this.budgetForm.name,
+          amount: this.budgetForm.amount ?? 0, // Używamy 0, jeśli amount jest null
+          date: this.budgetForm.date,
+          category: this.budgetForm.category,
+          type: this.budgetForm.type,
+        };
+        console.log('Form submitted:', item);
+        this.budgetService.addItems(item); // Dodajemy element do serwisu
+      } else {
+        console.error('Date is required and cannot be null.');
+      }
 
-  onReset() {
-    // Resetowanie formularza
-    this.budgetForm = {
-      name: '',
-      amount: null,
-      date: null,
-      category: '',
-      type: 'przychód' as 'przychód' | 'wydatek',
-    }; 
+      this.budgetForm = {
+        name: '',
+        amount: null,
+        date: null,
+        category: '',
+        type: 'przychód' as 'przychód' | 'wydatek',
+      }; // Resetujemy formularz
+  };
 
-  console.log('Form reset:', this.budgetForm);
-
+  
   }
 }

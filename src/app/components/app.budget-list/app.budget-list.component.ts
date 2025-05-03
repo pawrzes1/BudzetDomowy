@@ -12,32 +12,8 @@ import { CommonModule } from '@angular/common';
 })
 export class AppBudgetListComponent implements OnInit {
   // Przykładowe dane budżetowe
-  budgetItems: BudgetItem [] = [
-    {
-      id: 1,
-      name: 'Zakupy spożywcze',
-      amount: 200,
-      date: new Date('2023-10-01'),
-      category: 'Jedzenie',
-      type: 'wydatek'
-    },
-    {
-      id: 2,
-      name: 'Wynagrodzenie',
-      amount: 5000,
-      date: new Date('2023-10-05'),
-      category: 'Praca',
-      type: 'przychód'
-    },
-    {
-      id: 3,
-      name: 'Bilet do kina',
-      amount: 50,
-      date: new Date('2023-10-10'),
-      category: 'Rozrywka',
-      type: 'wydatek'
-    }
-  ];
+  budgetItems: BudgetItem [] = [];
+  
 
   constructor(private budgetService: BudgetService) {}
 

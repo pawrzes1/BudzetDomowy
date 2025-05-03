@@ -5,7 +5,32 @@ import { Injectable } from '@angular/core';
 })
 export class BudgetService {
  
-  private budgetItems: BudgetItem[] = [];
+  private budgetItems: BudgetItem[] = [
+    {
+      id: 1,
+      name: 'Zakupy spożywcze',
+      amount: 200,
+      date: new Date('2023-10-01'),
+      category: 'Jedzenie',
+      type: 'wydatek'
+    },
+    {
+      id: 2,
+      name: 'Wynagrodzenie',
+      amount: 5000,
+      date: new Date('2023-10-05'),
+      category: 'Praca',
+      type: 'przychód'
+    },
+    {
+      id: 3,
+      name: 'Bilet do kina',
+      amount: 50,
+      date: new Date('2023-10-10'),
+      category: 'Rozrywka',
+      type: 'wydatek'
+    }
+  ];
 
   getItems() {
     return this.budgetItems;

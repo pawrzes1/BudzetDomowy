@@ -18,7 +18,7 @@ export class BudgetService {
  
   private itemsSignal = signal<BudgetItem[]>([]); // Inicjalizacja sygnału z pustą tablicą
 
-  getItems() {
+  get items() {
     // Zwracamy kopię tablicy, aby uniknąć modyfikacji oryginalnej tablicy
     return this.itemsSignal.asReadonly(); // Zwracamy aktualną tablicę budżetową
   }
@@ -33,7 +33,26 @@ export class BudgetService {
   
 
   constructor() {
-
+    // Inicjalizacja serwisu budżetowego
+    this.itemsSignal.set([
+      {
+        id: 1,
+        name: 'Zakupy spożywcze',
+        amount: 200,
+        date: new Date('2023-10-01'),
+        category: 'Jedzenie',
+        type: 'wydatek',
+      },
+      {
+        id: 2,
+        name: 'Pensja',
+        amount: 5000,
+        date: new Date('2023-10-05'),
+        category: 'Praca',
+        type: 'przychód',
+      },
+    ]); // Inicjalizacja przykładowych danych
+    
   }
 }
 

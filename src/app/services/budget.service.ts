@@ -1,53 +1,4 @@
-import { Injectable } from '@angular/core';
-
-@Injectable({
-  providedIn: 'root'
-})
-export class BudgetService {
- 
-  private budgetItems: BudgetItem[] = [
-    {
-      id: 1,
-      name: 'Zakupy spożywcze',
-      amount: 200,
-      date: new Date('2023-10-01'),
-      category: 'Jedzenie',
-      type: 'wydatek'
-    },
-    {
-      id: 2,
-      name: 'Wynagrodzenie',
-      amount: 5000,
-      date: new Date('2023-10-05'),
-      category: 'Praca',
-      type: 'przychód'
-    },
-    {
-      id: 3,
-      name: 'Bilet do kina',
-      amount: 50,
-      date: new Date('2023-10-10'),
-      category: 'Rozrywka',
-      type: 'wydatek'
-    }
-  ];
-
-  getItems() {
-    return this.budgetItems;
-  }
-
-  addItems(item: BudgetItem) {
-    this.budgetItems.push(item);
-  }
-
-  removeItem(id: number) {
-    this.budgetItems = this.budgetItems.filter(item => item.id !== id);
-  }
-
-  constructor() {
-
-  }
-}
+import { Injectable, signal } from '@angular/core';
 
 export interface BudgetItem {
   id: number;
@@ -57,3 +8,32 @@ export interface BudgetItem {
   category: string;
   type: 'przychód' | 'wydatek';
 }
+
+
+@Injectable({
+  providedIn: 'root'
+})
+
+export class BudgetService {
+ 
+  private itemsSignal = signal<BudgetItem[]>([]); // Inicjalizacja sygnału z pustą tablicą
+
+  getItems() {
+    // Zwracamy kopię tablicy, aby uniknąć modyfikacji oryginalnej tablicy
+    return this.itemsSignal.asReadonly(); // Zwracamy aktualną tablicę budżetową
+  }
+
+  addItems(item: BudgetItem) {
+    const current = this.itemsSignal(); // Pobieramy aktualną tablicę budżetową
+    this.itemsSignal.set([...current, 
+        {...item, id: current.length + 1} // Dodajemy nowy element z unikalnym ID
+      ]); // Dodajemy nowy element do tablicy
+  }
+
+  
+
+  constructor() {
+
+  }
+}
+

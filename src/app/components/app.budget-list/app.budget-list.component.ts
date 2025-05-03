@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { BudgetItem, BudgetService } from '../../services/budget.service';
 import { CommonModule } from '@angular/common';
 
@@ -12,16 +12,23 @@ import { CommonModule } from '@angular/common';
 })
 export class AppBudgetListComponent implements OnInit {
   // Przykładowe dane budżetowe
-  budgetItems: BudgetItem [] = [];
+  private budgetService = inject(BudgetService); // Inicjalizacja serwisu budżetowego
+  
+  budgetItems = this.budgetService.getItems(); // Inicjalizacja tablicy budżetowej
+
+
   
 
-  constructor(private budgetService: BudgetService) {}
+  
 
   ngOnInit() {
     // Inicjalizacja komponentu
-    this.budgetItems = this.budgetService.getItems();
+  
   }
 
-
+  ngDoCheck(){
+    // Sprawdzanie zmian w danych budżetowych
+    this.budgetItems = this.budgetService.getItems();
+  }
 
 }

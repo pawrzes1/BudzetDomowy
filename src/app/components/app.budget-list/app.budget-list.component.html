@@ -1,9 +1,9 @@
 <div *ngIf="budgetItems.length > 0; else empty">
     <ul class="list-group list-group-flush mt-3">
-        <li *ngFor="let item of budgetItems" class="list-group-item d-flex justify-content-between align-items-center">
+        <li *ngFor="let item of budgetItems()" class="list-group-item d-flex justify-content-between align-items-center">
             <div class="d-flex flex-column">
                 <h5 class="mb-1">{{ item.name }}</h5>
-                <p class="mb-1">Kwota: {{ item.amount | currency }}</p>
+                <p class="mb-1">Kwota: {{ item.amount }} zł</p>
                 <p class="mb-1">Rodzaj: {{ item.type }}</p>
                 <p class="mb-1">Kategoria: {{ item.category }}</p>
                 <p class="mb-1">Data: {{ item.date | date }}</p>

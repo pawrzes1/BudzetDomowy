@@ -1,8 +1,8 @@
 
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { BudgetService } from '../../services/budget.service';
+import { FormsModule, NgForm } from '@angular/forms';
+import { BudgetItem, BudgetService } from '../../services/budget.service';
 
 
 @Component({
@@ -51,32 +51,27 @@ export class BudgetFormComponent {
 
 
   // Dodajemy metody do obsługi formularza
-  onSubmit() {
-    if (!this.budgetForm.name || !this.budgetForm.amount || !this.budgetForm.date || !this.budgetForm.category) {
-      if (this.budgetForm.date) { // Sprawdzamy, czy data nie jest null
-        const item = {
-          id: Math.floor(Math.random() * 1000), // Generowanie losowego ID
-          name: this.budgetForm.name,
-          amount: this.budgetForm.amount ?? 0, // Używamy 0, jeśli amount jest null
-          date: this.budgetForm.date,
-          category: this.budgetForm.category,
-          type: this.budgetForm.type,
-        };
-        console.log('Form submitted:', item);
-        this.budgetService.addItems(item); // Dodajemy element do serwisu
-      } else {
-        console.error('Date is required and cannot be null.');
-      }
+  onSubmit(form: NgForm) {
+    if(form.valid){}
+      this.budgetService.addItems({
+        id: 0,
+        name: this.budgetForm.name,
+        amount: Number(this.budgetForm.amount),
+        date: new Date(this.budgetForm.date!),
+        category: this.budgetForm.category,
+        type: this.budgetForm.type,
+      }); // Dodajemy nowy element do serwisu budżetowego
+      this.resetForm(); // Resetujemy formularz po dodaniu elementu
+  }
 
-      this.budgetForm = {
-        name: '',
-        amount: null,
-        date: null,
-        category: '',
-        type: 'przychód' as 'przychód' | 'wydatek',
-      }; // Resetujemy formularz
-  };
+  resetForm() {
+    this.budgetForm = {
+      name: '',
+      amount: null,
+      date: null,
+      category: '',
+      type: 'przychód' as 'przychód' | 'wydatek',
+    };
 
-  
   }
 }

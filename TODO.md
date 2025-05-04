@@ -1,38 +1,28 @@
-TODO- Budżet Domowy
 
-🔧 Funkcjonalności aplikacji
+---
 
-  [] Stworzyć model danych BudgetEntry (np. category, amount, date, description)
-  [] Stworzyć serwis BudgetService do obsługi danych (dodawanie, usuwanie, pobieranie z localStorage)
-  [] Połączyć BudgetFormComponent z serwisem i dodawaniem wpisów
-  [] Utworzyć komponent BudgetListComponent wyświetlający listę wpisów
-  [] Dodać filtrowanie: przychody / wydatki / wszystkie
-  [] Dodać możliwość usuwania wpisów
-  [] Dodać sumowanie wydatków i przychodów oraz bilans
-  [] Zapisywać dane w localStorage
-  
+### 📝 `TODO.md`
 
+```markdown
+# TODO – Budżet Domowy
 
-💄 Interfejs użytkownika i stylizacja
+## ✅ Zrobione
+- [x] Formularz dodawania wpisów (Reactive Forms)
+- [x] Walidacja danych (kwota > 0, wymagane pola)
+- [x] Zapisywanie wpisów w LocalStorage
+- [x] Resetowanie formularza po dodaniu
 
-  [] Stylizacja formularza (Bootstrap / Material / Tailwind)
-  [] Dodanie responsywności
-  [] Wyświetlanie powiadomień (np. po dodaniu wpisu)
+## 🛠️ Do zrobienia
+- [ ] Wyświetlanie listy dodanych wydatków/przychodów
+- [ ] Możliwość filtrowania wpisów po kategorii lub typie (wydatek/przychód)
+- [ ] Możliwość usuwania wpisów
+- [ ] Możliwość edycji wpisów
+- [ ] Sumowanie wydatków/przychodów
+- [ ] Responsywny widok na telefonach
+- [ ] Dodanie testów jednostkowych
+- [ ] Podsumowanie wydatków w formie wykresu (opcjonalnie)
 
-
-
-🧠 Logika i architektura
-
-  [] Dodać walidację formularza (Angular Forms)
-  [] Uporządkować strukturę projektu (podział na foldery: services, models, components)
-  [] Dodać komentarze w kodzie
-  [] Sprawdzić zgodność z zasadami clean code (nazwy, podział logiki)
-
-
-
-🚀 Usprawnienia i dokumentacja
-
-  [] Dodać plik README.md z instrukcją uruchamiania
-  [] Skonfigurować .gitignore 
-  [] Dodać favicon i meta tagi
-  [] Rozważyć testy jednostkowe komponentów i serwisów
+## ✨ Pomysły na przyszłość
+- [ ] Eksport danych do pliku CSV
+- [ ] Logowanie i konta użytkowników
+- [ ] Synchronizacja z chmurą

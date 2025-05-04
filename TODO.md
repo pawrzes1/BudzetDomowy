@@ -14,7 +14,7 @@
 
 ## 🛠️ Do zrobienia
 - [x] Wyświetlanie listy dodanych wydatków/przychodów
-- [ ] Możliwość filtrowania wpisów po kategorii lub typie (wydatek/przychód)
+- [x] Możliwość filtrowania wpisów po kategorii lub typie (wydatek/przychód)
 - [ ] Możliwość usuwania wpisów
 - [ ] Możliwość edycji wpisów
 - [ ] Sumowanie wydatków/przychodów

@@ -1,5 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 export interface BudgetItem {
   id: number;
@@ -10,6 +12,7 @@ export interface BudgetItem {
   type: 'przychód' | 'wydatek';
 }
 
+const STORAGE_KEY = 'budgetItems'; // Klucz do przechowywania danych w localStorage
 
 @Injectable({
   providedIn: 'root'
@@ -26,36 +29,41 @@ export class BudgetService {
   }
 
   addItems(item: any) {
-    const current = this.itemsSignal.value; // Pobieramy aktualną tablicę budżetową
-    this.itemsSignal.next([...current, 
-        {...item, id: current.length + 1} // Dodajemy nowy element z unikalnym ID
-      ]); // Dodajemy nowy element do tablicy
+    const newItem = { ...item, id: Date.now() }; // Tworzymy nowy element budżetowy z unikalnym id
+    const updated = [...this.itemsSignal.value, item]; // Tworzymy nową tablicę z dodanym elementem
+    this.itemsSignal.next(updated); // Aktualizujemy sygnał
+    this.saveToLocalStorage(updated); // Zapisujemy nową tablicę do localStorage
   }
 
+  removeItem(id: number) {
+    const updated = this.itemsSignal.value.filter((item) => item.id !== id); // Filtrowanie elementów według id
+    this.itemsSignal.next(updated); // Aktualizujemy sygnał
+    this.saveToLocalStorage(updated); // Zapisujemy nową tablicę do localStorage
+  }
+  
+
+  private loadFromLocalStorage() {
+    if (typeof localStorage !== 'undefined') {
+      const data = localStorage.getItem(STORAGE_KEY); // Pobieramy dane z localStorage
+      return data ? JSON.parse(data) : []; // Zwracamy sparsowane dane lub pustą tablicę
+    }
+    return []; // Zwracamy pustą tablicę, jeśli localStorage nie jest dostępne
+  }
+
+  private saveToLocalStorage(items: BudgetItem[]) {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); // Zapisujemy dane do localStorage
+    }
+    
+  }
   
 
   constructor() {
-    // Inicjalizacja serwisu budżetowego
-    this.itemsSignal.next([
-      {
-        id: 1,
-        name: 'Zakupy spożywcze',
-        amount: 200,
-        date: new Date('2023-10-01'),
-        category: 'Jedzenie',
-        type: 'wydatek',
-      },
-      {
-        id: 2,
-        name: 'Pensja',
-        amount: 5000,
-        date: new Date('2023-10-05'),
-        category: 'Praca',
-        type: 'przychód',
-      },
-    ]); // Inicjalizacja przykładowych danych
+    const loaded = this.loadFromLocalStorage(); // Ładujemy dane z localStorage
+    this.itemsSignal.next(loaded); // Ustawiamy załadowane dane jako aktualną tablicę budżetową
 
   }
+
 
   categories: string[]= ['Jedzenie', 'Transport', 'Mieszkanie', 'Rozrywka', 'Inne'];
   types: string[] = ['wydatek', 'przychód'];

@@ -22,9 +22,6 @@ export class AppBudgetFormComponent {
     type: ['wydatek', Validators.required]  // domyślnie wydatek
   });
 
-  constructor(budgetService: BudgetService) {
-    // Inicjalizacja formularza budżetowego 
-  }
 
   get categories() {
     return this.budgetService.categories; // Pobieranie kategorii z serwisu budżetowego
@@ -42,7 +39,7 @@ export class AppBudgetFormComponent {
       this.form.reset({
         name: '',
         amount: null,
-        date: new Date(),
+        date: new Date().toISOString().split('T')[0], // Ustawienie domyślnej daty na dzisiaj
         category: '',
         type: 'wydatek'
       });

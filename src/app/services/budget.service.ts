@@ -43,7 +43,7 @@ export class BudgetService {
   
 
   private loadFromLocalStorage() {
-    if (typeof localStorage !== 'undefined') {
+    if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
       const data = localStorage.getItem(STORAGE_KEY); // Pobieramy dane z localStorage
       return data ? JSON.parse(data) : []; // Zwracamy sparsowane dane lub pustą tablicę
     }
@@ -51,7 +51,8 @@ export class BudgetService {
   }
 
   private saveToLocalStorage(items: BudgetItem[]) {
-    if (typeof localStorage !== 'undefined') {
+    if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+      // Sprawdzamy, czy localStorage jest dostępne
       localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); // Zapisujemy dane do localStorage
     }
     

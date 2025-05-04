@@ -13,7 +13,7 @@
 - [x] Resetowanie formularza po dodaniu
 
 ## 🛠️ Do zrobienia
-- [ ] Wyświetlanie listy dodanych wydatków/przychodów
+- [x] Wyświetlanie listy dodanych wydatków/przychodów
 - [ ] Możliwość filtrowania wpisów po kategorii lub typie (wydatek/przychód)
 - [ ] Możliwość usuwania wpisów
 - [ ] Możliwość edycji wpisów

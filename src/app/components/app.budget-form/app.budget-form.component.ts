@@ -11,16 +11,30 @@ import { BudgetService } from '../../services/budget.service';
 })
 export class AppBudgetFormComponent {
   private fb = inject(FormBuilder);
-  private budgetService = inject(BudgetService);
-  categories: string[]= ['Jedzenie', 'Transport', 'Mieszkanie', 'Rozrywka', 'Inne'];
+  private budgetService = inject(BudgetService); 
 
+  
   form: FormGroup = this.fb.group({
     name: ['', Validators.required],
     amount: [null, [Validators.required, Validators.min(0.01)]],
-    date: [new Date(), Validators.required],
+    date: [new Date().toISOString().split('T')[0], Validators.required], // Ustawienie domyślnej daty na dzisiaj
     category: ['', Validators.required],
     type: ['wydatek', Validators.required]  // domyślnie wydatek
   });
+
+  constructor(budgetService: BudgetService) {
+    // Inicjalizacja formularza budżetowego 
+  }
+
+  get categories() {
+    return this.budgetService.categories; // Pobieranie kategorii z serwisu budżetowego
+  }
+  
+  get types() {
+    return this.budgetService.types; // Pobieranie typów z serwisu budżetowego
+  }
+
+
 
   onSubmit() {
     if (this.form.valid) {

@@ -1,4 +1,5 @@
 import { Injectable, signal } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 export interface BudgetItem {
   id: number;
@@ -16,16 +17,17 @@ export interface BudgetItem {
 
 export class BudgetService {
  
-  private itemsSignal = signal<BudgetItem[]>([]); // Inicjalizacja sygnału z pustą tablicą
+  private itemsSignal = new BehaviorSubject<any[]>([]); // Inicjalizacja sygnału z pustą tablicą
+  items$ = this.itemsSignal.asObservable(); // Tworzenie obserwowalnej wersji sygnału
 
   get items() {
-    // Zwracamy kopię tablicy, aby uniknąć modyfikacji oryginalnej tablicy
-    return this.itemsSignal.asReadonly(); // Zwracamy aktualną tablicę budżetową
+    // Getter do pobierania aktualnej tablicy budżetowej
+    return this.itemsSignal.value; // Zwracamy aktualną tablicę budżetową
   }
 
-  addItems(item: BudgetItem) {
-    const current = this.itemsSignal(); // Pobieramy aktualną tablicę budżetową
-    this.itemsSignal.set([...current, 
+  addItems(item: any) {
+    const current = this.itemsSignal.value; // Pobieramy aktualną tablicę budżetową
+    this.itemsSignal.next([...current, 
         {...item, id: current.length + 1} // Dodajemy nowy element z unikalnym ID
       ]); // Dodajemy nowy element do tablicy
   }
@@ -34,7 +36,7 @@ export class BudgetService {
 
   constructor() {
     // Inicjalizacja serwisu budżetowego
-    this.itemsSignal.set([
+    this.itemsSignal.next([
       {
         id: 1,
         name: 'Zakupy spożywcze',
@@ -52,7 +54,10 @@ export class BudgetService {
         type: 'przychód',
       },
     ]); // Inicjalizacja przykładowych danych
-    
+
   }
+
+  categories: string[]= ['Jedzenie', 'Transport', 'Mieszkanie', 'Rozrywka', 'Inne'];
+  types: string[] = ['wydatek', 'przychód'];
 }
 

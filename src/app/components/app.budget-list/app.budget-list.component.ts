@@ -1,55 +1,71 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { BudgetItem, BudgetService } from '../../services/budget.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-budget-list',
   imports: [CommonModule, FormsModule],
   standalone: true,
   templateUrl: './app.budget-list.component.html',
-  styleUrl: './app.budget-list.component.css',
+  styleUrls: ['./app.budget-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppBudgetListComponent {
+
+  @Output() delete = new EventEmitter<BudgetItem>(); // Emitowanie zdarzenia po usunięciu elementu
+  @Output() edit = new EventEmitter<BudgetItem>(); // Emitowanie zdarzenia po edytowaniu elementu\
   
   private budgetService = inject(BudgetService); // Inicjalizacja serwisu budżetowego
-  
-  selectedType: string = ''; // Domyślnie brak wybranego typu
-  selectedCategory: string = ''; // Domyślnie brak wybranej kategorii
 
-  filterByType(item: BudgetItem): boolean {
-    return this.selectedType === item.type; // Filtrowanie elementów według wybranego typu
-  }
-  filterByCategory(item: BudgetItem): boolean {
-    return this.selectedCategory === '' || item.category === this.selectedCategory; // Filtrowanie elementów według wybranej kategorii
-  }
-
+  private selectedType$ = new BehaviorSubject<string>(''); // Domyślnie brak wybranego typu
+  private selectedCategory$ = new BehaviorSubject<string>(''); // Domyślnie brak wybranej kategorii
 
   
-  itemsList: BudgetItem[] = []; // Local variable to store items
+  filteredItems$: Observable<BudgetItem[]> = combineLatest([
+    this.budgetService.items$,
+    this.selectedCategory$,
+    this.selectedType$,
+  ]).pipe(
+    map(([items,category, type]) =>
+      items.filter(item =>
+        (category ? item.category === category : true) && // Filtrowanie elementów według kategorii
+        (type ? item.type === type : true) // Filtrowanie elementów według typu
+      )
+    )
+  );
 
-  constructor() {
-    this.budgetService.items$.subscribe((items) => {
-      this.itemsList = items; // Subskrypcja na zmiany w tablicy budżetowej
-    });
+  onCategoryChange(value: Event): void{
+    const select = value.target as HTMLSelectElement; // Pobieranie elementu select
+    this.selectedCategory$.next(select.value); // Aktualizacja wybranej kategorii
   }
 
-  get items() {
-    return this.budgetService.items; // Pobieranie elementów budżetowych z serwisu
+  onTypeChange(event: Event): void{
+    const select = event.target as HTMLSelectElement; // Pobieranie elementu select
+    this.selectedType$.next(select.value); // Aktualizacja wybranego typu 
   }
+
+  onInit(): void {
+    this.budgetService.load(); // Ładowanie danych z localStorage 
+  }
+
   get categories() {
     return this.budgetService.categories; // Pobieranie kategorii z serwisu budżetowego
   }
   get types() {
     return this.budgetService.types; // Pobieranie typów z serwisu budżetowego
   }
-   
-filteredItems(){
-    return this.items.filter(item => 
-      (this.selectedCategory ? item.category === this.selectedCategory :true) && // Filtrowanie elementów według kategorii
-      (this.selectedType ? item.type === this.selectedType : true) // Filtrowanie elementów według typu
-    );
-    }
+  
+
+  onDelete(item: BudgetItem) {
+    this.delete.emit(item); // Emitowanie zdarzenia po usunięciu elementu
+  }
+
+  onEdit(item: BudgetItem) {
+    this.edit.emit(item); // Emitowanie zdarzenia po edytowaniu elementu
+  }
+  
+  
 }
 

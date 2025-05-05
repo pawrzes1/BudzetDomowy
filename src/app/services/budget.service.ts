@@ -12,58 +12,45 @@ export interface BudgetItem {
   type: 'przychód' | 'wydatek';
 }
 
-const STORAGE_KEY = 'budgetItems'; // Klucz do przechowywania danych w localStorage
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class BudgetService {
- 
-  private itemsSignal = new BehaviorSubject<any[]>([]); // Inicjalizacja sygnału z pustą tablicą
-  items$ = this.itemsSignal.asObservable(); // Tworzenie obserwowalnej wersji sygnału
+  private readonly STORAGE_KEY = 'budgetItems'; // Klucz do localStorage
+  private itemsSubject = new BehaviorSubject<BudgetItem[]>([]); // Inicjalizacja sygnału z pustą tablicą
+  items$ = this.itemsSubject.asObservable(); // Tworzenie obserwowalnej wersji sygnału
 
-  get items() {
-    // Getter do pobierania aktualnej tablicy budżetowej
-    return this.itemsSignal.value; // Zwracamy aktualną tablicę budżetową
-  }
-
-  addItems(item: any) {
-    const newItem = { ...item, id: Date.now() }; // Tworzymy nowy element budżetowy z unikalnym id
-    const updated = [...this.itemsSignal.value, item]; // Tworzymy nową tablicę z dodanym elementem
-    this.itemsSignal.next(updated); // Aktualizujemy sygnał
-    this.saveToLocalStorage(updated); // Zapisujemy nową tablicę do localStorage
-  }
-
-  removeItem(id: number) {
-    const updated = this.itemsSignal.value.filter((item) => item.id !== id); // Filtrowanie elementów według id
-    this.itemsSignal.next(updated); // Aktualizujemy sygnał
-    this.saveToLocalStorage(updated); // Zapisujemy nową tablicę do localStorage
-  }
   
-
-  private loadFromLocalStorage() {
-    if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
-      const data = localStorage.getItem(STORAGE_KEY); // Pobieramy dane z localStorage
-      return data ? JSON.parse(data) : []; // Zwracamy sparsowane dane lub pustą tablicę
-    }
-    return []; // Zwracamy pustą tablicę, jeśli localStorage nie jest dostępne
-  }
-
-  private saveToLocalStorage(items: BudgetItem[]) {
-    if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
-      // Sprawdzamy, czy localStorage jest dostępne
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); // Zapisujemy dane do localStorage
-    }
-    
-  }
+load(): void{
+  if(typeof localStorage !== 'undefined'){
+    const stored = localStorage.getItem('budgetItems'); // Pobieranie danych z localStorage
+    const items = stored ? JSON.parse(stored) : []; // Parsowanie danych lub zwracanie pustej tablicy
+    this.itemsSubject.next(items); // Aktualizacja sygnału
   
-
-  constructor() {
-    const loaded = this.loadFromLocalStorage(); // Ładujemy dane z localStorage
-    this.itemsSignal.next(loaded); // Ustawiamy załadowane dane jako aktualną tablicę budżetową
-
   }
+}
+  save(item: BudgetItem): void{
+    const current = this.itemsSubject.value; // Pobieranie aktualnej wartości sygnału
+    const updated = [...current, item]; // Tworzenie nowej tablicy z aktualnymi elementami i nowym elementem
+    this.itemsSubject.next(updated); // Aktualizacja sygnału
+    this.persist(updated); // Zapis nowej tablicy do localStorage
+  }
+
+  delete(item: BudgetItem): void{
+    const current = this.itemsSubject.value; // Pobieranie aktualnej wartości sygnału
+    const updated = current.filter(i => i.id !== item.id); // Tworzenie nowej tablicy bez usuniętego elementu
+    this.itemsSubject.next(updated); // Aktualizacja sygnału
+    this.persist(updated); // Zapis nowej tablicy do localStorage
+  }
+
+  private persist(items: BudgetItem[]): void{
+    if(typeof localStorage !== 'undefined'){
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(items)); // Zapis danych do localStorage
+    }
+  }
+
 
 
   categories: string[]= ['Jedzenie', 'Transport', 'Mieszkanie', 'Rozrywka', 'Inne'];

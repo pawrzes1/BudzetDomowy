@@ -1,4 +1,4 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="mb-4">
+<form [formGroup]="form" (ngSubmit)="submit()" class="mb-4">
   <div class="form-group mb-2">
     <label>Nazwa</label>
     <input type="text" class="form-control" formControlName="name" required />
@@ -18,7 +18,7 @@
     <label>Kategoria</label>
     <select class="form-select" formControlName="category" required>
       <option value="" disabled selected>Wybierz kategorię</option>
-      <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+      <option *ngFor="let category of categories()" [value]="category">{{ category }}</option>
     </select>
   </div>
 

@@ -1,7 +1,7 @@
 <div class="row mb-3">
     <div class="col-md-6">
         <label>Kategoria</label>
-        <select class="form-select" [(ngModel)]="selectedCategory" >
+        <select class="form-select" (change)="onTypeChange($event)" >
             <option value="">Wszystkie</option>
             <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
         </select>  
@@ -9,22 +9,24 @@
 
     <div class="col-md-6">
         <label>Rodzaj</label>
-        <select class="form-select" [(ngModel)]="selectedType">
+        <select class="form-select"  (change)="onCategoryChange($event)">
             <option value="">Wszystkie</option>
             <option *ngFor="let type of types" [value]="type">{{ type }}</option>
         </select>
     </div>
 </div>
 
-<div *ngIf="filteredItems().length > 0; else empty">
+<div *ngIf="filteredItems$ | async as items">
     <ul class="list-group list-group-flush mt-3">
-        <li *ngFor="let item of filteredItems()" class="list-group-item d-flex justify-content-between align-items-center">
+        <li *ngFor="let item of items" class="list-group-item d-flex justify-content-between align-items-center">
             <div class="d-flex flex-column">
                 <h5 class="mb-1">{{ item.name }}</h5>
                 <p class="mb-1">Kwota: {{ item.amount }} zł</p>
                 <p class="mb-1">Rodzaj: {{ item.type }}</p>
                 <p class="mb-1">Kategoria: {{ item.category }}</p>
                 <p class="mb-1">Data: {{ item.date | date }}</p>
+                <button (click)="onDelete(item)" class="btn btn-danger btn-sm">Usuń</button>
+                <button (click)="onEdit(item)" class="btn btn-primary btn-sm">Edytuj</button>
             </div>
             <!--<button (click)="deleteBudgetItem(item.id)" class="btn btn-danger btn-sm">Usuń</button>-->
         </li>

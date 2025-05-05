@@ -28,6 +28,7 @@ load(): void{
     const stored = localStorage.getItem('budgetItems'); // Pobieranie danych z localStorage
     const items = stored ? JSON.parse(stored) : []; // Parsowanie danych lub zwracanie pustej tablicy
     this.itemsSubject.next(items); // Aktualizacja sygnału
+    console.log('Wczytano elementy z localStorage:', items); // Logowanie wczytanych elementów
   
   }
 }

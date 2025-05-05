@@ -24,6 +24,9 @@ export class AppBudgetFormComponent implements OnChanges {
   @Input() itemToEdit: BudgetItem | null = null; // Element do edytowania
   @Output() save = new EventEmitter<BudgetItem>(); // Emitowanie zdarzenia po zapisaniu elementu
 
+  items: BudgetItem[] = []; // Tablica elementów budżetowych
+
+
   form!: FormGroup; // Formularz
   budgetService: BudgetService = inject(BudgetService); // Inicjalizacja serwisu budżetowego
   // Inicjalizacja formularza z domyślnymi wartościami
@@ -37,6 +40,25 @@ export class AppBudgetFormComponent implements OnChanges {
     type: ['wydatek', Validators.required]  // domyślnie wydatek
   });} // Inicjalizacja formularza
 
+
+  addItem(item: BudgetItem){
+    console.log('Dodano nowy element', item); // Logowanie nowego elementu
+    this.items.push(item); // Dodanie nowego elementu do tablicy
+    this.updateLocalStorage(); // Aktualizacja localStorage
+  }
+  
+  updateLocalStorage(){
+    localStorage.setItem('budgetItems', JSON.stringify(this.items)); // Zapis danych do localStorage
+    console.log('Zapisano elementy do localStorage:', this.items); // Logowanie zapisanych elementów
+  }
+
+  ngOnInit() {
+    this.budgetService.items$.subscribe(items => {
+      this.items = items; // Subskrypcja na zmiany w tablicy elementów
+      console.log('Odebrano elementy z serwisu:', items); // Logowanie odebranych elementów
+    });
+  }
+  
 
   ngOnChanges(){
     if(this.itemToEdit){
@@ -52,6 +74,7 @@ export class AppBudgetFormComponent implements OnChanges {
         : { ...this.form.value, id: Date.now() }; // Jeśli dodajemy nowy element, to generujemy nowe id
       this.save.emit(item); // Emitowanie zdarzenia z nowym elementem
       this.form.reset(); // Resetowanie formularza po zapisaniu
+      console.log('Dodano nowy element ',item); // Logowanie nowego elementu
       }
   }
 

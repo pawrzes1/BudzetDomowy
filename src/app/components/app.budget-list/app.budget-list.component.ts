@@ -3,10 +3,11 @@ import { BudgetItem, BudgetService } from '../../services/budget.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
+import { AppBudgetFormComponent } from "../app.budget-form/app.budget-form.component";
 
 @Component({
   selector: 'app-budget-list',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AppBudgetFormComponent],
   standalone: true,
   templateUrl: './app.budget-list.component.html',
   styleUrls: ['./app.budget-list.component.css'],
@@ -48,6 +49,7 @@ export class AppBudgetListComponent {
 
   onInit(): void {
     this.budgetService.load(); // Ładowanie danych z localStorage 
+    
   }
 
   get categories() {
